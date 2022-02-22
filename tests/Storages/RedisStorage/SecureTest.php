@@ -27,7 +27,6 @@ class SecureTest extends TestCase
 
         $redis = new Redis();
         $redis->connect($this->getRedisHost(), $this->getRedisPort());
-        $redis->auth('secret');
         $redis->eval($script);
         $redis->close();
     }
@@ -35,29 +34,17 @@ class SecureTest extends TestCase
     /** @test */
     public function valid_auth()
     {
-        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'secret');
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
         self::assertEquals(Collection::make($data), $storage->get($key));
     }
 
-    /**
-     * @test
-     * @expectedException RedisException
-     */
-    public function invalid_auth()
-    {
-        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'invalid');
-        $key = 'key';
-        $data = ['foo' => 1, 'bar' => new \DateTime()];
-        $storage->save($data, $key);
-    }
-
     /** @test */
     public function get()
     {
-        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'secret');
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -67,7 +54,7 @@ class SecureTest extends TestCase
     /** @test */
     public function delete()
     {
-        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'secret');
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort());
         $key = 'key';
         $data = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data, $key);
@@ -80,7 +67,7 @@ class SecureTest extends TestCase
     /** @test */
     public function get_all()
     {
-        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort(), 'secret');
+        $storage = new RedisStorage($this->getRedisHost(), $this->getRedisPort());
         $key1 = 'key1';
         $data1 = ['foo' => 1, 'bar' => new \DateTime()];
         $storage->save($data1, $key1);
@@ -113,6 +100,6 @@ class SecureTest extends TestCase
      */
     protected function getRedisPort()
     {
-        return (int) ($_ENV['REDIS_PORT'] ?? 6380);
+        return (int) ($_ENV['REDIS_PORT'] ?? 6379);
     }
 }

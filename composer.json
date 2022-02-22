@@ -22,8 +22,8 @@
         "mpociot/pipeline": "^1.0",
         "react/socket": "^1.11",
         "spatie/macroable": "^2.0",
-        "psr/container": "^2.0"
-
+        "psr/container": "^2.0",
+        "ext-redis": "*"
     },
     "suggest": {
         "doctrine/cache": "Use any Doctrine cache driver for cache",

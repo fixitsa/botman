@@ -303,6 +303,18 @@ trait HandlesConversations
         }
 
         $parameters[] = $conversation;
-        call_user_func_array($next, $parameters);
+
+        $positional_parameters = [];
+        $named_parameters = [];
+
+        foreach ($parameters as $key => $parameter) {
+            if (is_numeric($key)) {
+                $positional_parameters [] = $parameter;
+            } else {
+                $named_parameters [] = $parameter;
+            }
+        }
+
+        call_user_func_array($next, array_merge($positional_parameters,$named_parameters));
     }
 }
